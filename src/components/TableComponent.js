@@ -1,58 +1,53 @@
-import { Table, Tag, Space, Divider } from 'antd';
-import React from 'react';
-import EditModal from './EditModal';
+import React, { useState } from "react";
+import { Table, Space, Divider, Popconfirm } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteTodo } from "../features/Todos";
+import { addTodo } from "../features/Todos";
+import EditModal from "./EditModal";
 
 
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a>{text}</a>,
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    fixed: 'right',
-    width: 100,
-    render: (text, record) => (
-        <Space split={<Divider type="vertical" />} size="middle">
-            
-            <a><EditModal/></a>
-            <a>Delete</a>
-        </Space>
-    ),
-},
-];
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
+const TableComponent = (props) => {
+  const dispatch = useDispatch();
+    const todoList = useSelector((state) => state.todos.value);
+    const [todoId, setTodoId] = useState("");
 
 
-const TableComponent = () => {
+  const columns = [
+    {
+      title: "TODO",
+      dataIndex: "todo",
+      key: "todo",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "ACTION",
+      dataIndex: "id",
+      key: "id",
+      fixed: "right",
+      width: 100,
+      render: (id) => [
+          <Space split={<Divider type="vertical" />} size="middle">
+              <a>Done</a>
+              <EditModal todoId={id} />
+
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => {
+                  dispatch(deleteTodo({ id: id }));
+                }}
+              >
+                <a>Delete</a>
+              </Popconfirm>
+          </Space>
+        ],
+    },
+  ];
+
+
     return (
-            <Table columns={columns} dataSource={data} />
+      <div style={{ marginTop: 16 }}>
+        <Table columns={columns} dataSource={todoList} />
+      </div>  
     );
 };
 
