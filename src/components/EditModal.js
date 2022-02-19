@@ -1,32 +1,60 @@
-import React, { useState } from 'react';
-import { Modal, Button } from 'antd';
-import EditForm from './EditForm';
+import React, { useState } from "react";
+import { Modal, Button, Input } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { updateTodo } from "../features/Todos";
 
-const EditModal = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+const ModalCreate = ({ id, todo }) => {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const dispatch = useDispatch();
+    const [newTodo, setNewTodo] = useState("");
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
 
-  return (
-    <>
-      <a type="primary" onClick={showModal}>
-        EDIT
-      </a>
-      <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <EditForm />
-      </Modal>
-    </>
-  );
+    return (
+        <>
+            <a onClick={showModal}>Edit</a>
+            <Modal
+                title="Edit"
+                visible={isModalVisible}
+                onCancel={handleCancel}
+                footer={[
+                    <Button onClick={() => {
+                        dispatch(
+                            updateTodo({
+                                id: id, 
+                                todo: newTodo, 
+                            })
+                        );
+                        setIsModalVisible(false);
+
+                    }
+
+                    
+
+                    }>OK</Button>,
+                    <Button onClick={handleCancel}>Cancel</Button>,
+                ]}
+            >
+                <div>
+                    <Input
+                        type="text"
+                        placeholder="Edit Todo..."
+                        onChange={(event) => {
+                            setNewTodo(event.target.value); // menyimpan data input untuk baris ke 9(setNewTodo)
+                        }}
+                        defaultValue={todo}
+                    />
+                </div>
+            </Modal>
+        </>
+    );
 };
 
-export default EditModal
+export default ModalCreate;

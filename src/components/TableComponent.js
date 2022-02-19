@@ -17,7 +17,7 @@ const TableComponent = (props) => {
       title: "TODO",
       dataIndex: "todo",
       key: "todo",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <div>{text}</div>,
     },
     {
       title: "ACTION",
@@ -25,15 +25,15 @@ const TableComponent = (props) => {
       key: "id",
       fixed: "right",
       width: 100,
-      render: (id) => [
+      render: (rows, record) => [
           <Space split={<Divider type="vertical" />} size="middle">
               <a>Done</a>
-              <EditModal todoId={id} />
+              <EditModal id={rows} todo={record.todo} />
 
               <Popconfirm
                 title="Sure to delete?"
                 onConfirm={() => {
-                  dispatch(deleteTodo({ id: id }));
+                  dispatch(deleteTodo({ id: rows }));
                 }}
               >
                 <a>Delete</a>

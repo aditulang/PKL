@@ -1,18 +1,18 @@
 import React from "react";
 import TableComponent from "./TableComponent";
 import ModalCreate from "./ModalCreate";
-
+import { Card } from 'antd';
 
 
 const HomeComponent = () => {
     
     return (
-        <>
-            <div>
+        <div>             
+            <Card title="Todo App" style={{ marginTop:64 }}>
                 <ModalCreate />
                 <TableComponent />
-            </div>
-        </>
+            </Card>
+        </div>
     );
 };
 
